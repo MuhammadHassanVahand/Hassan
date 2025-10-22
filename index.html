@@ -1,25 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <!--
-    If you are serving your web app in a path other than the root, change the
-    href value below to reflect the base path you are serving from.
-
-    The path provided below has to start and end with a slash "/" in order for
-    it to work correctly.
-
-    For more details:
-    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
-
-    This is a placeholder for base href that will be replaced by the value of
-    the `--base-href` argument provided to `flutter build`.
-  -->
   <base href="/Hassan/">
-
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta name="description" content="A new Flutter project.">
-
+  <meta name="description" content="Muhammad Hassan Vahand - Flutter Developer Portfolio">
+  
   <!-- iOS meta tags & icons -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
@@ -31,8 +17,92 @@
 
   <title>Muhammad Hassan Vahand</title>
   <link rel="manifest" href="manifest.json">
+
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #000000;
+      font-family: 'Arial', sans-serif;
+    }
+
+    #loading {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #000000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+
+    .loading-content {
+      text-align: center;
+      color: white;
+    }
+
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid rgba(0, 255, 136, 0.3);
+      border-top: 4px solid #00FF88;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 20px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .loading-text {
+      color: #00FF88;
+      font-size: 16px;
+      margin-top: 10px;
+    }
+
+    .hidden {
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s ease-out;
+    }
+  </style>
 </head>
 <body>
+  <div id="loading">
+    <div class="loading-content">
+      <div class="spinner"></div>
+      <div class="loading-text">Loading Portfolio...</div>
+    </div>
+  </div>
+
   <script src="flutter_bootstrap.js" async></script>
+
+  <script>
+    window.addEventListener('flutter-first-frame', function() {
+      const loading = document.getElementById('loading');
+      setTimeout(() => {
+        loading.classList.add('hidden');
+        setTimeout(() => {
+          loading.style.display = 'none';
+        }, 500);
+      }, 1000);
+    });
+
+    // Fallback in case Flutter doesn't load
+    setTimeout(() => {
+      const loading = document.getElementById('loading');
+      if (loading && !loading.classList.contains('hidden')) {
+        loading.classList.add('hidden');
+        setTimeout(() => {
+          loading.style.display = 'none';
+        }, 500);
+      }
+    }, 8000);
+  </script>
 </body>
 </html>
