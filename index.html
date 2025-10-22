@@ -2,10 +2,11 @@
 <html>
 <head>
   <base href="/Hassan/">
+
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta name="description" content="Muhammad Hassan Vahand - Flutter Developer Portfolio">
-  
+  <meta name="description" content="A new Flutter project.">
+
   <!-- iOS meta tags & icons -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
@@ -19,24 +20,28 @@
   <link rel="manifest" href="manifest.json">
 
   <style>
+    /* Loading Screen Styles - Match Your Flutter App Theme */
     body {
       margin: 0;
       padding: 0;
-      background: #000000;
+      background: #000000; /* Black background like your app */
       font-family: 'Arial', sans-serif;
+      overflow: hidden;
     }
 
-    #loading {
+    #loading-screen {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: #000000;
+      background: linear-gradient(135deg, #000000 0%, #0a0a0a 100%);
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
       z-index: 9999;
+      transition: opacity 0.5s ease-out;
     }
 
     .loading-content {
@@ -44,14 +49,66 @@
       color: white;
     }
 
+    .logo-container {
+      margin-bottom: 30px;
+    }
+
+    /* Updated to circular logo to match your favicon */
+    .logo {
+      width: 120px; /* Larger to accommodate circular design */
+      height: 120px;
+      border-radius: 50%; /* Perfect circle */
+      background: linear-gradient(135deg, #00FF88 0%, #00CC6A 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0 auto 20px;
+      box-shadow: 0 8px 32px rgba(0, 255, 136, 0.3);
+      border: 3px solid rgba(255, 255, 255, 0.1);
+      padding: 8px; /* Space for the image */
+    }
+
+    .logo-inner {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%; /* Circular to match outer container */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      background: #000000; /* Black background for the image area */
+    }
+
+    .logo-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover; /* Changed to cover for better circular fit */
+      border-radius: 50%; /* Ensure circular shape */
+    }
+
+    .logo-text {
+      font-size: 24px;
+      font-weight: bold;
+      color: #00FF88;
+      margin-bottom: 10px;
+    }
+
+    .loading-text {
+      font-size: 18px;
+      color: #FFFFFF;
+      margin-bottom: 30px;
+      opacity: 0.9;
+    }
+
+    /* Spinner Animation */
     .spinner {
-      width: 40px;
-      height: 40px;
-      border: 4px solid rgba(0, 255, 136, 0.3);
-      border-top: 4px solid #00FF88;
+      width: 50px;
+      height: 50px;
+      border: 3px solid rgba(255, 255, 255, 0.1);
+      border-top: 3px solid #00FF88;
       border-radius: 50%;
       animation: spin 1s linear infinite;
-      margin: 0 auto 20px;
+      margin: 0 auto;
     }
 
     @keyframes spin {
@@ -59,50 +116,202 @@
       100% { transform: rotate(360deg); }
     }
 
-    .loading-text {
-      color: #00FF88;
-      font-size: 16px;
-      margin-top: 10px;
+    /* Progress Bar */
+    .progress-container {
+      width: 200px;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 2px;
+      margin: 20px auto;
+      overflow: hidden;
     }
 
-    .hidden {
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, #00FF88, #00CC6A);
+      border-radius: 2px;
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    /* Hide Flutter content initially */
+    #flutter-app {
+      opacity: 0;
+      transition: opacity 0.5s ease-in;
+    }
+
+    .loaded #flutter-app {
+      opacity: 1;
+    }
+
+    .loaded #loading-screen {
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.5s ease-out;
+    }
+
+    /* Fallback letter style */
+    .fallback-letter {
+      color: #00FF88;
+      font-weight: bold;
+      font-size: 36px;
+      font-family: 'Arial', sans-serif;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .logo {
+        width: 100px;
+        height: 100px;
+      }
+      
+      .fallback-letter {
+        font-size: 30px;
+      }
+      
+      .logo-text {
+        font-size: 20px;
+      }
+      
+      .loading-text {
+        font-size: 16px;
+      }
+      
+      .spinner {
+        width: 40px;
+        height: 40px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .logo {
+        width: 80px;
+        height: 80px;
+      }
+      
+      .fallback-letter {
+        font-size: 24px;
+      }
     }
   </style>
 </head>
 <body>
-  <div id="loading">
+  <!-- Loading Screen -->
+  <div id="loading-screen">
     <div class="loading-content">
-      <div class="spinner"></div>
+      <div class="logo-container">
+        <div class="logo">
+          <div class="logo-inner">
+            <!-- Using your circular favicon.png image -->
+            <img src="assets/images/favicon.png" alt="Muhammad Hassan" class="logo-image" 
+                 onerror="handleImageError(this)">
+          </div>
+        </div>
+        <div class="logo-text">Muhammad Hassan</div>
+      </div>
+      
       <div class="loading-text">Loading Portfolio...</div>
+      
+      <div class="spinner"></div>
+      
+      <div class="progress-container">
+        <div class="progress-bar" id="progress-bar"></div>
+      </div>
+      
+      <div style="color: #888; font-size: 12px; margin-top: 10px;">
+        Crafting digital experiences with Flutter
+      </div>
     </div>
   </div>
 
-  <script src="flutter_bootstrap.js" async></script>
+  <!-- Flutter App -->
+  <div id="flutter-app">
+    <script src="flutter_bootstrap.js" async></script>
+  </div>
 
   <script>
-    window.addEventListener('flutter-first-frame', function() {
-      const loading = document.getElementById('loading');
-      setTimeout(() => {
-        loading.classList.add('hidden');
+    // Image error handler
+    function handleImageError(img) {
+      const logoInner = img.parentElement;
+      logoInner.innerHTML = '<span class="fallback-letter">H</span>';
+      img.style.display = 'none';
+    }
+
+    // Loading screen management
+    document.addEventListener('DOMContentLoaded', function() {
+      const loadingScreen = document.getElementById('loading-screen');
+      const progressBar = document.getElementById('progress-bar');
+      const flutterApp = document.getElementById('flutter-app');
+      
+      let progress = 0;
+      const maxProgress = 90; // Leave 10% for Flutter initialization
+      
+      // Preload the favicon image
+      const favicon = new Image();
+      favicon.src = 'assets/images/favicon.png';
+      favicon.onload = function() {
+        console.log('Favicon loaded successfully');
+      };
+      favicon.onerror = function() {
+        console.log('Favicon failed to load, using fallback');
+        // If the image fails to load, trigger the error handler on the existing image
+        const existingImage = document.querySelector('.logo-image');
+        if (existingImage) {
+          handleImageError(existingImage);
+        }
+      };
+      
+      // Simulate progress bar
+      const progressInterval = setInterval(() => {
+        progress += Math.random() * 10;
+        if (progress >= maxProgress) {
+          progress = maxProgress;
+          clearInterval(progressInterval);
+        }
+        progressBar.style.width = progress + '%';
+      }, 200);
+      
+      // Listen for Flutter ready event
+      window.addEventListener('flutter-first-frame', function() {
+        clearInterval(progressInterval);
+        
+        // Complete progress bar
+        progressBar.style.width = '100%';
+        
+        // Wait a bit for smooth transition
         setTimeout(() => {
-          loading.style.display = 'none';
+          document.body.classList.add('loaded');
+          
+          // Remove loading screen after transition
+          setTimeout(() => {
+            loadingScreen.style.display = 'none';
+          }, 500);
         }, 500);
-      }, 1000);
+      });
+      
+      // Fallback: hide loading screen after 8 seconds max
+      setTimeout(() => {
+        if (document.body.classList.contains('loaded')) return;
+        
+        clearInterval(progressInterval);
+        progressBar.style.width = '100%';
+        document.body.classList.add('loaded');
+        
+        setTimeout(() => {
+          loadingScreen.style.display = 'none';
+        }, 500);
+      }, 8000);
     });
 
-    // Fallback in case Flutter doesn't load
-    setTimeout(() => {
-      const loading = document.getElementById('loading');
-      if (loading && !loading.classList.contains('hidden')) {
-        loading.classList.add('hidden');
-        setTimeout(() => {
-          loading.style.display = 'none';
-        }, 500);
+    // Handle errors
+    window.addEventListener('error', function() {
+      const loadingScreen = document.getElementById('loading-screen');
+      const loadingText = document.querySelector('.loading-text');
+      
+      if (loadingText) {
+        loadingText.textContent = 'Taking longer than expected...';
+        loadingText.style.color = '#FF6B6B';
       }
-    }, 8000);
+    });
   </script>
 </body>
 </html>
